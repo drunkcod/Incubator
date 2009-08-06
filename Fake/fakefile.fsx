@@ -1,24 +1,25 @@
+#r "Lib\\Fake.dll"
+
 open System
-open System.Diagnostics
+open System.Reflection
+open Fake
 
-let exec commandLine = 
-  let args = 
-    ProcessStartInfo(
-      Arguments = "/C \"" + commandLine + "\"",
-      FileName = "cmd",
-      UseShellExecute = false)
-  let p = Process.Start(args)
-  p.WaitForExit()
-  if p.ExitCode <> 0 then
-    failwith ("\"" + commandLine + "\" failed with exit code " + (string p.ExitCode))
+[<Literal>]
+let TypePrefix = "FSI_0001+"
 
-let args = fsi.CommandLineArgs |> Seq.skip 1
+let invoke (taskName:string) =
+    let parts = taskName.Split('.')
+    let t = Type.GetType(TypePrefix + parts.[0], true)
+    let prop = t.GetProperty(parts.[1], BindingFlags.Static + BindingFlags.Public + BindingFlags.NonPublic)
+    (prop.GetValue(null, null) :?> ITask).Run()
 
-let steps = [|
-  "svn up trunk";
-  "cd trunk && rake -n build:release build:test_cint";
-  "svn up BuildEnvironment";
-  "svn up BuildEnvironment\\trunk";
-  "cd BuildEnvironment && go clean compile"|]
-
-steps |> Seq.iter exec
+module Build =
+    let compile = task (fun () ->
+        let steps = [|
+            "fsc --nologo Source\Fake.fs Source\Shell.fs --target:library -o Build\Fake.dll";
+            "echo Done."|]
+        steps |> Seq.iter Shell.run)
+try
+    invoke "Build.compile"
+with 
+    Failure e -> Console.WriteLine e
