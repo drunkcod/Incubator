@@ -1,25 +1,23 @@
 #r "Lib\\Fake.dll"
 
 open System
-open System.Reflection
+open System.Diagnostics
 open Fake
 
-[<Literal>]
-let TypePrefix = "FSI_0001+"
-
-let invoke (taskName:string) =
-    let parts = taskName.Split('.')
-    let t = Type.GetType(TypePrefix + parts.[0], true)
-    let prop = t.GetProperty(parts.[1], BindingFlags.Static + BindingFlags.Public + BindingFlags.NonPublic)
-    (prop.GetValue(null, null) :?> ITask).Run()
-
+let invoke (taskName:string) = 
+    let targetAssembly = StackTrace(false).GetFrame(0).GetMethod().DeclaringType.Assembly
+    try
+        Fake.invoke targetAssembly taskName
+    with Failure e -> Console.WriteLine e
+    
 module Build =
     let compile = task (fun () ->
         let steps = [|
             "fsc --nologo Source\Fake.fs Source\Shell.fs --target:library -o Build\Fake.dll";
             "echo Done."|]
         steps |> Seq.iter Shell.run)
-try
-    invoke "Build.compile"
-with 
-    Failure e -> Console.WriteLine e
+
+
+invoke "Build.compile"
+invoke "Build.test"
+invoke "Missing.thing"
