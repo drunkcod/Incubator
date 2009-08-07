@@ -18,7 +18,7 @@ module Fake =
         assembly.GetTypes()
         |> Seq.tryFind (fun x -> x.Name = name)   
         
-    let private getProperty (t:Option<Type>) (name:string) =
+    let private getProperty (t:Type option) (name:string) =
         match t with
             None -> None
             | Some(t) ->

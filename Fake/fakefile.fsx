@@ -1,4 +1,4 @@
-#r "Lib\\Fake.dll"
+#r "Lib\\Fake.Core.dll"
 
 open System
 open System.Diagnostics
@@ -13,10 +13,10 @@ let invoke (taskName:string) =
 module Build =
     let compile = task (fun () ->
         let steps = [|
-            "fsc --nologo Source\Fake.fs Source\Shell.fs --target:library -o Build\Fake.dll";
+            "fsc -a -o Build\Fake.Core.dll --nologo Source\\Fake.fs Source\\Shell.fs";
+            "fsc --target:exe -o Build\Fake.exe --nologo Source\\Main.fs";
             "echo Done."|]
         steps |> Seq.iter Shell.run)
-
 
 invoke "Build.compile"
 invoke "Build.test"
