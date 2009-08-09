@@ -1,7 +1,7 @@
 @echo off
-fsi fakefile.fsx
+Lib\Fake Build.compile
 if ERRORLEVEL 1 goto error
-  copy /Y Build\Fake.Core.dll Lib
+  copy /Y Build\* Lib
 exit /B 0
 :error
 echo Update Failed.

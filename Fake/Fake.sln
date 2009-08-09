@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 10
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Fake.Core", "Source\Fake.Core.fsproj", "{A1B1CF5C-1404-4FFF-90CB-906B00D70387}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Fake", "Source\Fake.fsproj", "{12FC8529-95E6-4858-B81D-A9ECE83A420D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A1B1CF5C-1404-4FFF-90CB-906B00D70387}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A1B1CF5C-1404-4FFF-90CB-906B00D70387}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A1B1CF5C-1404-4FFF-90CB-906B00D70387}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A1B1CF5C-1404-4FFF-90CB-906B00D70387}.Release|Any CPU.Build.0 = Release|Any CPU
+		{12FC8529-95E6-4858-B81D-A9ECE83A420D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{12FC8529-95E6-4858-B81D-A9ECE83A420D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{12FC8529-95E6-4858-B81D-A9ECE83A420D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{12FC8529-95E6-4858-B81D-A9ECE83A420D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

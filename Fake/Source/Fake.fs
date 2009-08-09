@@ -2,17 +2,17 @@ namespace Fake
 open System
 open System.Reflection
 
-type ITask =
+type ITarget =
     abstract Run : unit -> unit
 
 [<AutoOpen>]
 module Fake =
     let task x = 
         {new obj() 
-            interface ITask 
+            interface ITarget 
             with member this.Run() = x()}
         
-    let run (task:ITask) = task.Run()
+    let run (target:ITarget) = target.Run()
      
     let private findTargetType (assembly:Assembly) name =
         assembly.GetTypes()
@@ -35,4 +35,4 @@ module Fake =
     let invoke (assembly:Assembly) (taskName:string) =
         match getTask assembly taskName with
             | None -> failwith ("target \"" + taskName + " not found.")
-            | Some(prop) -> (prop.GetValue(null, null) :?> ITask).Run()
+            | Some(prop) -> (prop.GetValue(null, null) :?> ITarget).Run()
