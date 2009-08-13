@@ -3,11 +3,11 @@ namespace Fake
 open System.Diagnostics
 
 module Shell =
-    let run commandLine = 
+    let Run commandLine = 
       let args = 
         ProcessStartInfo(
-          Arguments = "/C \"" + commandLine + "\"",
           FileName = "cmd",
+          Arguments = "/C \"" + commandLine + "\"",
           UseShellExecute = false)
       let p = Process.Start(args)
       p.WaitForExit()

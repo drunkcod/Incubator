@@ -5,10 +5,10 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>a1b1cf5c-1404-4fff-90cb-906b00d70387</ProjectGuid>
+    <ProjectGuid>{d6d10f91-d9a0-48e5-9e59-a4f262c650e5}</ProjectGuid>
     <OutputType>Library</OutputType>
     <RootNamespace>Fake.Core</RootNamespace>
-    <AssemblyName>Fake.Core</AssemblyName>
+    <AssemblyName>Fake.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <Name>Fake.Core</Name>
   </PropertyGroup>
@@ -40,15 +40,27 @@
   <ItemGroup>
     <Reference Include="mscorlib" />
     <Reference Include="FSharp.Core" />
+    <Reference Include="nunit.framework, Version=2.5.2.9222, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77">
+      <Name>nunit.framework</Name>
+      <AssemblyName>nunit.framework.dll</AssemblyName>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Lib\NUnit\nunit.framework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ITarget.fs" />
-    <Compile Include="Shell.fs" />
-    <Compile Include="Fake.fs" />
+    <ProjectReference Include="..\Source\Fake.Core.fsproj">
+      <Name>Fake.Core</Name>
+      <Project>{a1b1cf5c-1404-4fff-90cb-906b00d70387}</Project>
+      <Private>True</Private>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="FakeTests.fs" />
   </ItemGroup>
   <Import Project="$(ProgramFiles)\Microsoft F#\v4.0\Microsoft.FSharp.Targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
