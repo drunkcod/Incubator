@@ -18,11 +18,13 @@ module SampleBuild =
     let c = [a] => log "c"
     let d = [b; c] => log "d"
     let failingTarget = task <| fun () -> failwith "ZOMG! Failiure"
+    let dependsOnFailure = [failingTarget] => task (fun () -> ())
 
 module When_running_SampleBuild =
     [<SetUp>]
     let clear() = SampleBuild.targetsExecuted.Length <- 0
-    let invoke = invoke (Assembly.GetExecutingAssembly())
+    let fake = Fake(Assembly.GetExecutingAssembly())
+    let invoke = fake.Invoke
     
     [<Test>]
     let should_run_each_dependency_only_once() =
@@ -32,7 +34,7 @@ module When_running_SampleBuild =
     [<Test>]
     let should_raise_MissingTarget_for_missing_target() =
         let missingTargetRaised = ref false
-        Fake.MissingTarget <- fun x -> missingTargetRaised := true
+        fake.MissingTarget <- fun x -> missingTargetRaised := true
         invoke "SampleBuild.missingTarget" |> ignore
         Assert.That(!missingTargetRaised, Is.True)
                 
@@ -41,5 +43,9 @@ module When_running_SampleBuild =
         Assert.That(invoke "SampleBuild.missingTarget", Is.EqualTo(Status.TargetMissing))   
 
     [<Test>]
-    let should_return_TargetFailed_if_target_throws() =
-        Assert.That(invoke "SampleBuild.failingTarget", Is.EqualTo(Status.TargetFailed)) 
+    let should_return_TargetFailed_if_target_fails() =
+        Assert.That(invoke "SampleBuild.failingTarget", Is.EqualTo(Status.TargetFailed))
+
+    [<Test>]
+    let should_return_TargetFail_if_dependency_fails() =
+        Assert.That(invoke "SampleBuild.dependsOnFailure", Is.EqualTo(Status.TargetFailed))

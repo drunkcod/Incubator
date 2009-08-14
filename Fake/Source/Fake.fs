@@ -1,6 +1,5 @@
 namespace Fake
 open System
-open System.Collections.Generic
 open System.Reflection
 
 type Status = 
@@ -8,58 +7,43 @@ type Status =
     | TargetFailed = 1
     | TargetMissing = 2
 
-[<AutoOpen>]
-module Fake =
-    let private executed = HashSet<ITarget>()
-
-    let run (target:ITarget) = target.Run()
-       
-    let task x = 
-        {new obj() 
-            interface ITarget 
-            with member this.Run() = x()}
-
-    let (=>) required x = task (fun () ->
-        required |> Seq.iter (fun item ->
-            if executed.Add(item) then
-                run item)   
-        run x)
-            
-    let exec prepare = 
-        let shell = ShellTask()
-        prepare shell
-        shell            
-         
-    let private findTargetType (assembly:Assembly) name =
-        assembly.GetTypes()
-        |> Seq.tryFind (fun x -> x.Name = name)   
-        
-    let private maybe = function
+module Option =
+    let maybe = function
         | null -> None
-        | x -> Some(x) 
-        
-    let private getProperty (name:string) (t:Type) =
-        maybe(t.GetProperty(name, BindingFlags.Static + BindingFlags.Public + BindingFlags.NonPublic))
+        | x -> Some(x)
+
+type Fake(assembly:Assembly) =                     
+    let mutable missingTarget : string -> unit = fun x -> ()
     
-    let private getValue (name:string) (t:Type option) =
-        Option.bind (getProperty name) t
+    member this.MissingTarget
+        with get() = missingTarget
+        and set(value:string -> unit) = missingTarget <- value
+
+    member private this.FindTargetType name =
+        assembly.GetTypes()
+        |> Seq.tryFind (fun x -> x.Name = name)
+        
+    static member private GetProperty (name:string) (t:Type) =
+        t.GetProperty(name, BindingFlags.Static + BindingFlags.Public + BindingFlags.NonPublic)
+        |> Option.maybe
+    
+    static member private GetValue (name:string) (t:Type option) =
+        Option.bind (Fake.GetProperty name) t
         |> Option.map (fun prop -> prop.GetValue(null, null))
      
-    let private getTask (assembly:Assembly) (taskName:string) =
+    member private this.GetTask (taskName:string) =
         let parts = taskName.Split('.')
-        findTargetType assembly parts.[0]
-        |> getValue parts.[1] 
-        
-    let mutable MissingTarget = fun x -> ()        
-                            
-    let invoke (assembly:Assembly) (taskName:string) =
+        this.FindTargetType parts.[0]
+        |> Fake.GetValue parts.[1] 
+                                    
+    member this.Invoke (taskName:string) =
         executed.Clear()
-        match getTask assembly taskName with
-            | None -> 
-                MissingTarget taskName
-                Status.TargetMissing
-            | Some(target) ->
-                try
-                 (target :?> ITarget).Run()
-                 Status.Ok
-                with _ -> Status.TargetFailed
+        match this.GetTask taskName with
+        | None -> 
+            this.MissingTarget taskName
+            Status.TargetMissing
+        | Some(target) ->
+            try
+             (target :?> ITarget).Run()
+             Status.Ok
+            with _ -> Status.TargetFailed

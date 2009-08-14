@@ -28,8 +28,11 @@ let tryInvoke (result:CompilerResults) args=
         result.Errors |> Seq.cast<CompilerError> |> Seq.iter Console.WriteLine
         -1
     else            
-        let result = 
-            args |> Seq.map (invoke result.CompiledAssembly)
+        let result =
+            let fake = Fake(result.CompiledAssembly) 
+            fake.MissingTarget <- fun target -> Console.WriteLine("Target: \"{0}\" not found.", target)
+
+            args |> Seq.map fake.Invoke
             |> Seq.forall (fun x -> x = Status.Ok)
         if result then
             0
@@ -37,8 +40,6 @@ let tryInvoke (result:CompilerResults) args=
             
 [<EntryPoint>]
 let main args =
-    Fake.MissingTarget <- fun target -> Console.WriteLine("Target: \"{0}\" not found.", target)
-
     match findFakeFile() |> Option.map compile with
     | None -> fakeFileNotFound()
     | Some(result) ->  tryInvoke result args
