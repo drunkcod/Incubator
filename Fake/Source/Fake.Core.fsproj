@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="ITarget.fs" />
     <Compile Include="Shell.fs" />
+    <Compile Include="ShellTask.fs" />
     <Compile Include="Fake.fs" />
   </ItemGroup>
   <Import Project="$(ProgramFiles)\Microsoft F#\v4.0\Microsoft.FSharp.Targets" />

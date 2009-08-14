@@ -4,7 +4,7 @@ open System
 module Build =
     let CompileCore = exec <| fun t ->
         t.Program <- "fsc"
-        t.Arguments <- "-a -o Build\Fake.Core.dll --nologo Source\\ITarget.fs Source\\Shell.fs Source\\Fake.fs -r System.Core"
+        t.Arguments <- "-a -o Build\Fake.Core.dll --nologo Source\\ITarget.fs Source\\Shell.fs Source\\ShellTask.fs Source\\Fake.fs -r System.Core"
             
     let CompileExe = [CompileCore] => exec (fun t ->
         t.Program <- "fsc"        
