@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -9,7 +9,7 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>Fake</RootNamespace>
     <AssemblyName>Fake</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <Name>Fake</Name>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -41,18 +41,23 @@
     <StartWorkingDirectory>D:\Incubator\Fake\</StartWorkingDirectory>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FSharp.Compiler.CodeDom, Version=3.9.9.995, Culture=neutral, PublicKeyToken=a19089b1c74d0809">
+    <Reference Include="FSharp.Compiler.CodeDom, Version=1.9.6.16, Culture=neutral, PublicKeyToken=a19089b1c74d0809">
       <Name>FSharp.Compiler.CodeDom</Name>
       <AssemblyName>FSharp.Compiler.CodeDom.dll</AssemblyName>
+      <SpecificVersion>True</SpecificVersion>
+      <HintPath>..\Lib\FSharp.Compilder.CodeDom.dll</HintPath>
+    </Reference>
+    <Reference Include="FSharp.Core, Version=1.9.6.16, Culture=neutral, PublicKeyToken=a19089b1c74d0809">
+      <Name>FSharp.Core</Name>
+      <AssemblyName>FSharp.Core.dll</AssemblyName>
+      <SpecificVersion>True</SpecificVersion>
+    </Reference>
+    <Reference Include="mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+      <Name>mscorlib</Name>
+      <AssemblyName>mscorlib.dll</AssemblyName>
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Lib\FSharp.Compiler.CodeDom.dll</HintPath>
-      <Private>True</Private>
     </Reference>
-    <Reference Include="mscorlib" />
     <Reference Include="System" />
-    <Reference Include="System.Core">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Main.fs" />
@@ -64,7 +69,7 @@
       <Private>True</Private>
     </ProjectReference>
   </ItemGroup>
-  <Import Project="$(ProgramFiles)\Microsoft F#\v4.0\Microsoft.FSharp.Targets" />
+  <Import Project="$(MSBuildExtensionsPath)\FSharp\1.0\Microsoft.FSharp.Targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
 	     Other similar extension points exist, see Microsoft.Common.targets.
 	<Target Name="BeforeBuild">

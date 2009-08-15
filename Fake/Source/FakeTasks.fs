@@ -1,5 +1,7 @@
 ﻿namespace Fake
 open System.Collections.Generic
+open System.IO
+open System.Runtime.InteropServices
 
 [<AutoOpen>]
 module FakeTasks =        
@@ -14,6 +16,11 @@ module FakeTasks =
         let shell = ShellTask()
         prepare shell
         shell  
+
+    let msbuild file = 
+        ShellTask(
+            Program = Path.Combine(Path.Combine(RuntimeEnvironment.GetRuntimeDirectory(), "..\\v3.5"), "MSBuild.exe"),
+            Arguments = file)        
 
     let private runOnce target =
         if executed.Add(target) then

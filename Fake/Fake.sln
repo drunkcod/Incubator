@@ -1,11 +1,14 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 10
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Fake.Core", "Source\Fake.Core.fsproj", "{A1B1CF5C-1404-4FFF-90CB-906B00D70387}"
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Fake", "Source\Fake.fsproj", "{12FC8529-95E6-4858-B81D-A9ECE83A420D}"
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Fake.Tests", "Tests\Fake.Tests.fsproj", "{D6D10F91-D9A0-48E5-9E59-A4F262C650E5}"
+	ProjectSection(ProjectDependencies) = postProject
+		{A1B1CF5C-1404-4FFF-90CB-906B00D70387} = {A1B1CF5C-1404-4FFF-90CB-906B00D70387}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

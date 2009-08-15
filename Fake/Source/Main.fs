@@ -13,10 +13,10 @@ let findFakeFile() =
     |> Seq.tryFind defaultFakeFile
 
 let compile path =
-    use compiler = new FSharpCodeProvider()
+    use compiler = new FSharpCodeProvider() 
     let options = CompilerParameters(GenerateExecutable = false, GenerateInMemory = true)
+    options.ReferencedAssemblies.Add(typeof<option<_>>.Assembly.Location) |> ignore
     options.ReferencedAssemblies.Add(typeof<Fake.ITarget>.Assembly.Location) |> ignore
-    options.ReferencedAssemblies.Add("System.Core") |> ignore
     compiler.CompileAssemblyFromFile(options, [|path|])
 
 let fakeFileNotFound() =

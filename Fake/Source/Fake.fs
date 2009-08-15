@@ -20,8 +20,13 @@ type Fake(assembly:Assembly) =
         and set(value:string -> unit) = missingTarget <- value
 
     member private this.FindTargetType name =
-        assembly.GetTypes()
-        |> Seq.tryFind (fun x -> x.Name = name)
+        try
+            assembly.GetTypes()
+            |> Seq.tryFind (fun x -> x.Name = name)
+        with :? ReflectionTypeLoadException as e ->
+            e.LoaderExceptions
+            |> Seq.iter Console.WriteLine
+            None
         
     static member private GetProperty (name:string) (t:Type) =
         t.GetProperty(name, BindingFlags.Static + BindingFlags.Public + BindingFlags.NonPublic)
