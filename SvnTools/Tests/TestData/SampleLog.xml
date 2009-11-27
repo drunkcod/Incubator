@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+<log>
+<logentry
+   revision="1815">
+<author>marc</author>
+<date>2009-10-23T14:27:20.601116Z</date>
+<msg>Updated Authentication base schema and base data.
+Updated PanelManagement base data.
+Deleted old PanelManagement change scripts.
+Removed unused PanelManagement scripts.</msg>
+</logentry>
+<logentry
+   revision="1813">
+<author>marc</author>
+<date>2009-10-23T13:48:02.196993Z</date>
+<msg>Removed non up to date database scripts.</msg>
+</logentry>
+<logentry
+   revision="1810">
+<author>ninnie</author>
+<date>2009-10-23T13:29:38.621867Z</date>
+<msg>Removed web projects.</msg>
+</logentry>
+<logentry
+   revision="1809">
+<author>ninnie</author>
+<date>2009-10-23T13:26:26.554450Z</date>
+<msg>Removed these two web projects that have been residing in Web.Cpx.Net for a long time.</msg>
+</logentry>
+<logentry
+   revision="1806">
+<author>kristoffer</author>
+<date>2009-10-23T13:10:45.686615Z</date>
+<msg>Updated service contract</msg>
+</logentry>
+<logentry
+   revision="1804">
+<author>kristoffer</author>
+<date>2009-10-23T12:52:35.861841Z</date>
+<msg>Added initial service contract</msg>
+</logentry>
+<logentry
+   revision="1803">
+<author>kristoffer</author>
+<date>2009-10-23T12:51:21.453686Z</date>
+<msg>Autoindent</msg>
+</logentry>
+<logentry
+   revision="1801">
+<author>daniel</author>
+<date>2009-10-23T12:28:59.278702Z</date>
+<msg>Made it possible to close project in sampling service</msg>
+</logentry>
+<logentry
+   revision="1799">
+<author>marc</author>
+<date>2009-10-23T12:02:29.331751Z</date>
+<msg>Updated BaseData for PanelManagement.</msg>
+</logentry>
+<logentry
+   revision="1797">
+<author>marc</author>
+<date>2009-10-23T10:47:22.263248Z</date>
+<msg>Updated PanelManagement database schema and base data.
+Updated PostalCode scripts.
+</msg>
+</logentry>
+</log>

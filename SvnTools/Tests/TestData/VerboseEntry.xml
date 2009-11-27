@@ -1,0 +1,9 @@
+﻿<?xml version="1.0"?>
+<logentry revision="1">
+  <paths>
+    <path kind="file" action="M">/ModifiedFile</path>
+    <path kind="dir" action="M">/ModifiedDirectory</path>
+    <path kind="file" action="A">/AddedFile</path>
+    <path kind="file" action="D">/DeletedFile</path>
+  </paths>
+</logentry>
