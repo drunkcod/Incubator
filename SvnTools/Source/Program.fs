@@ -58,15 +58,18 @@ type Row = {
     Date : string
     Added : int
     Deleted : int }
-
-module Program =
+    
+module Option =
+    [<CompiledName("GetValueOrDefault")>]
     let getOrDefault def = function
         | Some(x) -> x
-        | None -> def
+        | None -> def        
+
+module Program =
         
     let findOrDefault m def key = 
         Map.tryFind key m
-        |> getOrDefault def
+        |> Option.getOrDefault def
 
     let [<EntryPoint>] main args =
         let log = Xml.read<SubversionLog> Console.In

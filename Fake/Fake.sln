@@ -1,9 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Fake.Core", "Source\Fake.Core.fsproj", "{A1B1CF5C-1404-4FFF-90CB-906B00D70387}"
-EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Fake", "Source\Fake.fsproj", "{12FC8529-95E6-4858-B81D-A9ECE83A420D}"
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Fake", "Source\Fake.fsproj", "{A1B1CF5C-1404-4FFF-90CB-906B00D70387}"
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Fake.Tests", "Tests\Fake.Tests.fsproj", "{D6D10F91-D9A0-48E5-9E59-A4F262C650E5}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -20,10 +18,6 @@ Global
 		{A1B1CF5C-1404-4FFF-90CB-906B00D70387}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A1B1CF5C-1404-4FFF-90CB-906B00D70387}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A1B1CF5C-1404-4FFF-90CB-906B00D70387}.Release|Any CPU.Build.0 = Release|Any CPU
-		{12FC8529-95E6-4858-B81D-A9ECE83A420D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{12FC8529-95E6-4858-B81D-A9ECE83A420D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{12FC8529-95E6-4858-B81D-A9ECE83A420D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{12FC8529-95E6-4858-B81D-A9ECE83A420D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D6D10F91-D9A0-48E5-9E59-A4F262C650E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D6D10F91-D9A0-48E5-9E59-A4F262C650E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D6D10F91-D9A0-48E5-9E59-A4F262C650E5}.Release|Any CPU.ActiveCfg = Release|Any CPU

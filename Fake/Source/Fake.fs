@@ -1,18 +1,14 @@
 namespace Fake
 open System
 open System.Reflection
+open Xlnt.Stuff
 
 type Status = 
     | Ok = 0
     | TargetFailed = 1
     | TargetMissing = 2
 
-module Option =
-    let maybe = function
-        | null -> None
-        | x -> Some(x)
-
-type Fake(assembly:Assembly) =                     
+type FakeBuild(assembly:Assembly) =                     
     let mutable missingTarget : string -> unit = fun x -> ()
     
     member this.MissingTarget
@@ -33,13 +29,13 @@ type Fake(assembly:Assembly) =
         |> Option.maybe
     
     static member private GetValue (name:string) (t:Type option) =
-        Option.bind (Fake.GetProperty name) t
+        Option.bind (FakeBuild.GetProperty name) t
         |> Option.map (fun prop -> prop.GetValue(null, null))
      
     member private this.GetTask (taskName:string) =
         let parts = taskName.Split('.')
         this.FindTargetType parts.[0]
-        |> Fake.GetValue parts.[1] 
+        |> FakeBuild.GetValue parts.[1] 
                                     
     member this.Invoke (taskName:string) =
         executed.Clear()

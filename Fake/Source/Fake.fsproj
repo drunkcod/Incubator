@@ -5,9 +5,9 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>12fc8529-95e6-4858-b81d-a9ece83a420d</ProjectGuid>
+    <ProjectGuid>a1b1cf5c-1404-4fff-90cb-906b00d70387</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>Fake</RootNamespace>
+    <RootNamespace>Fake.Core</RootNamespace>
     <AssemblyName>Fake</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <Name>Fake</Name>
@@ -30,27 +30,18 @@
     <WarningLevel>3</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <OutputPath>..\Build</OutputPath>
     <WarningLevel>4</WarningLevel>
-    <OutputPath>D:\Incubator\Fake\Build\</OutputPath>
-    <StartWorkingDirectory>D:\Incubator\Fake\</StartWorkingDirectory>
-    <StartArguments>Build.compile</StartArguments>
+    <StartWorkingDirectory>D:\BlackPearl\Incubator\Fake\</StartWorkingDirectory>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <OutputPath>..\Build</OutputPath>
     <WarningLevel>4</WarningLevel>
-    <OutputPath>D:\Incubator\Fake\Build\</OutputPath>
-    <StartWorkingDirectory>D:\Incubator\Fake\</StartWorkingDirectory>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FSharp.Compiler.CodeDom, Version=1.9.6.16, Culture=neutral, PublicKeyToken=a19089b1c74d0809">
-      <Name>FSharp.Compiler.CodeDom</Name>
-      <AssemblyName>FSharp.Compiler.CodeDom.dll</AssemblyName>
-      <SpecificVersion>True</SpecificVersion>
-      <HintPath>..\Lib\FSharp.Compilder.CodeDom.dll</HintPath>
-    </Reference>
-    <Reference Include="FSharp.Core, Version=1.9.6.16, Culture=neutral, PublicKeyToken=a19089b1c74d0809">
-      <Name>FSharp.Core</Name>
-      <AssemblyName>FSharp.Core.dll</AssemblyName>
-      <SpecificVersion>True</SpecificVersion>
+    <Reference Include="FSharp.Compiler.CodeDom, Version=1.9.7.8, Culture=neutral, PublicKeyToken=a19089b1c74d0809" />
+    <Reference Include="FSharp.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
       <Name>mscorlib</Name>
@@ -58,16 +49,22 @@
       <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Core, Version=3.5.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+      <Name>System.Core</Name>
+      <AssemblyName>System.Core.dll</AssemblyName>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\Xlnt.Stuff\Source\Option.fs">
+      <Link>Option.fs</Link>
+    </Compile>
+    <Compile Include="ITarget.fs" />
+    <Compile Include="Shell.fs" />
+    <Compile Include="ShellTask.fs" />
+    <Compile Include="FakeTasks.fs" />
+    <Compile Include="Fake.fs" />
     <Compile Include="Main.fs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Source\Fake.Core.fsproj">
-      <Name>Fake.Core</Name>
-      <Project>{a1b1cf5c-1404-4fff-90cb-906b00d70387}</Project>
-      <Private>True</Private>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\FSharp\1.0\Microsoft.FSharp.Targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

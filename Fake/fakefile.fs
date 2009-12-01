@@ -1,3 +1,4 @@
+namespace Fake
 open Fake
 open System
 open System.IO

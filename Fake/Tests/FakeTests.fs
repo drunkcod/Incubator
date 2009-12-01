@@ -23,7 +23,7 @@ module SampleBuild =
 module When_running_SampleBuild =
     [<SetUp>]
     let clear() = SampleBuild.targetsExecuted.Length <- 0
-    let fake = Fake(Assembly.GetExecutingAssembly())
+    let fake = FakeBuild(Assembly.GetExecutingAssembly())
     let invoke = fake.Invoke
     
     [<Test>]
