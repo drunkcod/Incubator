@@ -3,14 +3,14 @@ open System
 open System.Reflection
 open Xlnt.Stuff
 
-type Status = 
+type Status =
     | Ok = 0
     | TargetFailed = 1
     | TargetMissing = 2
 
-type CakeBuild(assembly:Assembly) =                     
+type CakeBuild(assembly:Assembly) =
     let mutable missingTarget : string -> unit = fun x -> ()
-    
+
     member this.MissingTarget
         with get() = missingTarget
         and set(value:string -> unit) = missingTarget <- value
@@ -23,24 +23,24 @@ type CakeBuild(assembly:Assembly) =
             e.LoaderExceptions
             |> Seq.iter Console.WriteLine
             None
-        
+
     static member private GetProperty (name:string) (t:Type) =
         t.GetProperty(name, BindingFlags.Static + BindingFlags.Public + BindingFlags.NonPublic)
         |> Option.maybe
-    
+
     static member private GetValue (name:string) (t:Type option) =
         Option.bind (CakeBuild.GetProperty name) t
         |> Option.map (fun prop -> prop.GetValue(null, null))
-     
+
     member private this.GetTask (taskName:string) =
         let parts = taskName.Split('.')
         this.FindTargetType parts.[0]
-        |> CakeBuild.GetValue parts.[1] 
-                                    
+        |> CakeBuild.GetValue parts.[1]
+
     member this.Invoke (taskName:string) =
         executed.Clear()
         match this.GetTask taskName with
-        | None -> 
+        | None ->
             this.MissingTarget taskName
             Status.TargetMissing
         | Some(target) ->

@@ -25,22 +25,22 @@ module When_running_SampleBuild =
     let clear() = SampleBuild.targetsExecuted.Length <- 0
     let Cake = CakeBuild(Assembly.GetExecutingAssembly())
     let invoke = Cake.Invoke
-    
+
     [<Test>]
     let should_run_each_dependency_only_once() =
         invoke "SampleBuild.d" |> ignore
         Assert.That(SampleBuild.targetsExecuted.ToString(), Is.EqualTo("abcd"))
-    
+
     [<Test>]
     let should_raise_MissingTarget_for_missing_target() =
         let missingTargetRaised = ref false
         Cake.MissingTarget <- fun x -> missingTargetRaised := true
         invoke "SampleBuild.missingTarget" |> ignore
         Assert.That(!missingTargetRaised, Is.True)
-                
+
     [<Test>]
     let should_return_TargetMissing_for_missing_target() =
-        Assert.That(invoke "SampleBuild.missingTarget", Is.EqualTo(Status.TargetMissing))   
+        Assert.That(invoke "SampleBuild.missingTarget", Is.EqualTo(Status.TargetMissing))
 
     [<Test>]
     let should_return_TargetFailed_if_target_fails() =

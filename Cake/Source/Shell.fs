@@ -3,8 +3,8 @@ namespace Cake
 open System.Diagnostics
 
 module Shell =
-    let Run commandLine = 
-      let args = 
+    let Run commandLine =
+      let args =
         ProcessStartInfo(
           FileName = "cmd",
           Arguments = "/C \"" + commandLine + "\"",
