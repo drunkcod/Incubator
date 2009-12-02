@@ -19,7 +19,7 @@ module CakeTasks =
 
     let msbuild file = 
         ShellTask(
-            Program = Path.Combine(Path.Combine(RuntimeEnvironment.GetRuntimeDirectory(), "..\\v3.5"), "MSBuild.exe"),
+            Program = Path.Combine(Path.Combine(RuntimeEnvironment.GetRuntimeDirectory(), "..\\..\\Framework\\v3.5"), "MSBuild.exe"),
             Arguments = file)        
 
     let private runOnce target =
