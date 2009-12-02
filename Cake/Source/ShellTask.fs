@@ -1,4 +1,4 @@
-﻿namespace Fake
+﻿namespace Cake
 
 type ShellTask() =
     [<DefaultValue>] val mutable Program : string

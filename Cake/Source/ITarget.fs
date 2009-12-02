@@ -1,4 +1,4 @@
-﻿namespace Fake
+﻿namespace Cake
 
 type ITarget =
     abstract Run : unit -> unit

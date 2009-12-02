@@ -1,4 +1,4 @@
-namespace Fake
+namespace Cake
 
 open System.Diagnostics
 

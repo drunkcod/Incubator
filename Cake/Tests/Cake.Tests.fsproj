@@ -5,12 +5,12 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>a1b1cf5c-1404-4fff-90cb-906b00d70387</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{d6d10f91-d9a0-48e5-9e59-a4f262c650e5}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <RootNamespace>Fake.Core</RootNamespace>
-    <AssemblyName>Fake</AssemblyName>
+    <AssemblyName>Cake.Tests</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
-    <Name>Fake</Name>
+    <Name>Fake.Core</Name>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -32,39 +32,27 @@
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <OutputPath>..\Build</OutputPath>
     <WarningLevel>4</WarningLevel>
-    <StartWorkingDirectory>D:\BlackPearl\Incubator\Fake\</StartWorkingDirectory>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <OutputPath>..\Build</OutputPath>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FSharp.Compiler.CodeDom, Version=1.9.7.8, Culture=neutral, PublicKeyToken=a19089b1c74d0809" />
-    <Reference Include="FSharp.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-      <SpecificVersion>False</SpecificVersion>
-    </Reference>
-    <Reference Include="mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-      <Name>mscorlib</Name>
-      <AssemblyName>mscorlib.dll</AssemblyName>
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="nunit.framework">
+      <HintPath>D:\BlackPearl\Incubator\Cake\Lib\NUnit\nunit.framework.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Core, Version=3.5.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-      <Name>System.Core</Name>
-      <AssemblyName>System.Core.dll</AssemblyName>
-      <SpecificVersion>False</SpecificVersion>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\Xlnt.Stuff\Source\Option.fs">
-      <Link>Option.fs</Link>
-    </Compile>
-    <Compile Include="ITarget.fs" />
-    <Compile Include="Shell.fs" />
-    <Compile Include="ShellTask.fs" />
-    <Compile Include="FakeTasks.fs" />
-    <Compile Include="Fake.fs" />
-    <Compile Include="Main.fs" />
+    <Compile Include="CakeTests.fs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Source\Cake.fsproj">
+      <Name>Cake</Name>
+      <Project>{a1b1cf5c-1404-4fff-90cb-906b00d70387}</Project>
+      <Private>True</Private>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\FSharp\1.0\Microsoft.FSharp.Targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

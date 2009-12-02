@@ -1,27 +1,27 @@
-namespace Fake
+namespace Cake
 open System
 open System.IO
 open System.CodeDom.Compiler
 open Microsoft.FSharp.Compiler.CodeDom
 
-module FakeConsole =
-    let findFakeFile() =
-        let defaultFakeFile x = 
+module CakeConsole =
+    let findCakeFile() =
+        let defaultCakeFile x = 
             match Path.GetFileName(x) with
-            | "fakefile.fs" -> true
+            | "Cakefile.fs" -> true
             | _ -> false
         Directory.GetFiles(Environment.CurrentDirectory)
-        |> Seq.tryFind defaultFakeFile
+        |> Seq.tryFind defaultCakeFile
 
     let compile path =
         use compiler = new FSharpCodeProvider() 
         let options = CompilerParameters(GenerateExecutable = false, GenerateInMemory = true)
         options.ReferencedAssemblies.Add(typeof<option<_>>.Assembly.Location) |> ignore
-        options.ReferencedAssemblies.Add(typeof<FakeBuild>.Assembly.Location) |> ignore
+        options.ReferencedAssemblies.Add(typeof<CakeBuild>.Assembly.Location) |> ignore
         compiler.CompileAssemblyFromFile(options, [|path|])
 
-    let fakeFileNotFound() =
-        Console.WriteLine "No Fakefile found (looking for: fakefile.fs)"
+    let CakeFileNotFound() =
+        Console.WriteLine "No Cakefile found (looking for: Cakefile.fs)"
         -1
 
     let tryInvoke (result:CompilerResults) args=        
@@ -30,10 +30,10 @@ module FakeConsole =
             -1
         else            
             let result =
-                let fake = FakeBuild(result.CompiledAssembly) 
-                fake.MissingTarget <- fun target -> Console.WriteLine("Target: \"{0}\" not found.", target)
+                let Cake = CakeBuild(result.CompiledAssembly) 
+                Cake.MissingTarget <- fun target -> Console.WriteLine("Target: \"{0}\" not found.", target)
 
-                args |> Seq.map fake.Invoke
+                args |> Seq.map Cake.Invoke
                 |> Seq.forall (fun x -> x = Status.Ok)
             if result then
                 0
@@ -41,6 +41,6 @@ module FakeConsole =
                 
     [<EntryPoint>]
     let main args =
-        match findFakeFile() |> Option.map compile with
-        | None -> fakeFileNotFound()
+        match findCakeFile() |> Option.map compile with
+        | None -> CakeFileNotFound()
         | Some(result) ->  tryInvoke result args

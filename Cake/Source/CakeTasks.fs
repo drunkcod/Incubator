@@ -1,10 +1,10 @@
-﻿namespace Fake
+﻿namespace Cake
 open System.Collections.Generic
 open System.IO
 open System.Runtime.InteropServices
 
 [<AutoOpen>]
-module FakeTasks =        
+module CakeTasks =        
     let internal executed = HashSet<ITarget>()
            
     let task x = 

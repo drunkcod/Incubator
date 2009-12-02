@@ -1,5 +1,5 @@
-﻿namespace Fake
-open Fake
+﻿namespace Cake
+open Cake
 open System.Text
 open System.Reflection
 open NUnit.Framework
@@ -23,8 +23,8 @@ module SampleBuild =
 module When_running_SampleBuild =
     [<SetUp>]
     let clear() = SampleBuild.targetsExecuted.Length <- 0
-    let fake = FakeBuild(Assembly.GetExecutingAssembly())
-    let invoke = fake.Invoke
+    let Cake = CakeBuild(Assembly.GetExecutingAssembly())
+    let invoke = Cake.Invoke
     
     [<Test>]
     let should_run_each_dependency_only_once() =
@@ -34,7 +34,7 @@ module When_running_SampleBuild =
     [<Test>]
     let should_raise_MissingTarget_for_missing_target() =
         let missingTargetRaised = ref false
-        fake.MissingTarget <- fun x -> missingTargetRaised := true
+        Cake.MissingTarget <- fun x -> missingTargetRaised := true
         invoke "SampleBuild.missingTarget" |> ignore
         Assert.That(!missingTargetRaised, Is.True)
                 
