@@ -2,7 +2,7 @@
 open Cake
 open System.Text
 open System.Reflection
-open NUnit.Framework
+open FNUnit
 
 (*
     Sample diamond shaped build.
@@ -11,8 +11,8 @@ open NUnit.Framework
        C
 *)
 module SampleBuild =
-    let targetsExecuted = StringBuilder()
-    let log (value:string) = task <| fun () -> targetsExecuted.Append(value) |> ignore
+    let ExecutedTargets = StringBuilder()
+    let log (value:string) = task <| fun () -> ExecutedTargets.Append(value) |> ignore
     let a = log "a"
     let b = [a] => log "b"
     let c = [a] => log "c"
@@ -21,31 +21,33 @@ module SampleBuild =
     let dependsOnFailure = [failingTarget] => task (fun () -> ())
 
 module When_running_SampleBuild =
-    [<SetUp>]
-    let clear() = SampleBuild.targetsExecuted.Length <- 0
+    let ExecutedTargets() = SampleBuild.ExecutedTargets.ToString()
+    
+    [<Setup>]
+    let clear() = SampleBuild.ExecutedTargets.Length <- 0
     let Cake = CakeBuild(Assembly.GetExecutingAssembly())
     let invoke = Cake.Invoke
 
-    [<Test>]
+    [<Fact>]
     let should_run_each_dependency_only_once() =
         invoke "SampleBuild.d" |> ignore
-        Assert.That(SampleBuild.targetsExecuted.ToString(), Is.EqualTo("abcd"))
+        ExecutedTargets() |> should be "abcd"
 
-    [<Test>]
+    [<Fact>]
     let should_raise_MissingTarget_for_missing_target() =
         let missingTargetRaised = ref false
         Cake.MissingTarget <- fun x -> missingTargetRaised := true
         invoke "SampleBuild.missingTarget" |> ignore
-        Assert.That(!missingTargetRaised, Is.True)
+        !missingTargetRaised |> should be true
 
-    [<Test>]
+    [<Fact>]
     let should_return_TargetMissing_for_missing_target() =
-        Assert.That(invoke "SampleBuild.missingTarget", Is.EqualTo(Status.TargetMissing))
+        invoke "SampleBuild.missingTarget" |> should be Status.TargetMissing
 
-    [<Test>]
-    let should_return_TargetFailed_if_target_fails() =
-        Assert.That(invoke "SampleBuild.failingTarget", Is.EqualTo(Status.TargetFailed))
+    [<Fact>]
+    let should_return_TargetFailed_if_target_fails() =        
+        invoke "SampleBuild.failingTarget" |> should be Status.TargetFailed
 
-    [<Test>]
-    let should_return_TargetFail_if_dependency_fails() =
-        Assert.That(invoke "SampleBuild.dependsOnFailure", Is.EqualTo(Status.TargetFailed))
+    [<Fact>]
+    let should_return_TargetFail_if_dependency_fails() =        
+        invoke "SampleBuild.dependsOnFailure" |> should be Status.TargetFailed

@@ -45,6 +45,9 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\Xlnt.Stuff\Source\FNUnit.fs">
+      <Link>FNUnit.fs</Link>
+    </Compile>
     <Compile Include="CakeTests.fs" />
   </ItemGroup>
   <ItemGroup>
