@@ -55,7 +55,9 @@
     <Content Include="TestData\VerboseEntry.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Compile Include="FNUnit.fs" />
+    <Compile Include="..\..\Xlnt.Stuff\Source\FNUnit.fs">
+      <Link>FNUnit.fs</Link>
+    </Compile>
     <Compile Include="When_parsing_sample_log.fs" />
     <Compile Include="When_parsing_sample_entry.fs" />
     <Compile Include="When_parsing_verbose_entry.fs" />
