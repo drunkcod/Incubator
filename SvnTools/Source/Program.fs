@@ -3,6 +3,7 @@ open System
 open System.IO
 open System.Collections.Generic
 open System.Xml.Serialization
+open Xlnt.Stuff
 
 module Xml =
     [<CompiledName("Read")>]
@@ -59,33 +60,34 @@ type Row = {
     Added : int
     Deleted : int }
     
-module Option =
-    [<CompiledName("GetValueOrDefault")>]
-    let getOrDefault def = function
-        | Some(x) -> x
-        | None -> def        
-
 module Program =
         
     let findOrDefault m def key = 
         Map.tryFind key m
         |> Option.getOrDefault def
 
-    let [<EntryPoint>] main args =
-        let log = Xml.read<SubversionLog> Console.In
-        let data =
-            log.Entries
-            |> Seq.groupBy (fun x -> x.Date.ToString("yyyy-MM-dd"))
-            |> Seq.map (fun (date, entries) ->
-                let actions = 
-                    entries |> Seq.collect (fun x -> x.Actions)       
-                    |> Seq.filter (fun x -> x.Path.EndsWith(".cs") || x.Path.EndsWith(".rb") || x.Path.EndsWith(".vb"))
-                    |> Seq.countBy (fun x -> x.Action)               
-                date, actions)
+    let byDate f (entries:SubversionLogEntry seq) = 
+        entries
+        |> Seq.groupBy (fun x -> x.Date.ToString("yyyy-MM-dd"))
+        |> Seq.map (fun (date, entries) -> date, f entries)
+            
+    let countActions (entries:SubversionLogEntry seq) =            
+        entries |> Seq.collect (fun x -> x.Actions)       
+        |> Seq.filter (fun x -> x.Path.EndsWith(".cs") || x.Path.EndsWith(".rb") || x.Path.EndsWith(".vb"))
+        |> Seq.countBy  (fun x -> x.Action)
 
+    let countAuthor (entries:SubversionLogEntry seq) = entries |> Seq.countBy (fun x -> x.Author)        
+
+    let inline join sep s = s |> Seq.reduce (fun x y -> x + sep + y)
+
+    let [<EntryPoint>] main team =
+        let log = Xml.read<SubversionLog> Console.In
+        let data = log.Entries |> byDate countAuthor
+
+        Console.WriteLine("{0}; {1}", "date", team |> join "; " )
         data |> Seq.sortBy fst
         |> Seq.iter (fun (date, actions) ->
             let get = findOrDefault (Map.ofSeq actions) 0    
-            Console.WriteLine("{0}; {1}; {2}; {3}", date, get "A", get "D", get "M"))
-
+            let data = team |> Seq.map (get >> string) |> join "; "
+            Console.WriteLine("{0}; {1}", date, data))
         0
