@@ -76,15 +76,15 @@ module Program =
         |> Seq.filter (fun x -> x.Path.EndsWith(".cs") || x.Path.EndsWith(".rb") || x.Path.EndsWith(".vb"))
         |> Seq.countBy  (fun x -> x.Action)
 
-    let countAuthor (entries:SubversionLogEntry seq) = entries |> Seq.countBy (fun x -> x.Author)        
+    let countAuthor = Seq.countBy (fun (x:SubversionLogEntry) -> x.Author)        
 
-    let inline join sep s = s |> Seq.reduce (fun x y -> x + sep + y)
+    let join sep s = s |> Seq.reduce (fun x y -> x + sep + y)
 
     let [<EntryPoint>] main team =
         let log = Xml.read<SubversionLog> Console.In
         let data = log.Entries |> byDate countAuthor
 
-        Console.WriteLine("{0}; {1}", "date", team |> join "; " )
+        Console.WriteLine("{0}; {1}", "date", team |> join "; ")
         data |> Seq.sortBy fst
         |> Seq.iter (fun (date, actions) ->
             let get = findOrDefault (Map.ofSeq actions) 0    
