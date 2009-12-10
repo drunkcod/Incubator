@@ -1,3 +1,4 @@
 Build
-**/*.suo
+*.suo
 obj/
+TrackerTools/Server/bin
