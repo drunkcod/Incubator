@@ -88,6 +88,6 @@ module Program =
         data |> Seq.sortBy fst
         |> Seq.iter (fun (date, actions) ->
             let get = findOrDefault (Map.ofSeq actions) 0    
-            let data = team |> Seq.map (get >> string) |> join "; "
+            let data = team |> Seq.mapi (fun n who -> string (n + 1) + "; " + (get >> string) who) |> join "; "
             Console.WriteLine("{0}; {1}", date, data))
         0
