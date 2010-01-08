@@ -16,6 +16,8 @@ namespace NMeter
         public void SomeMethod() {
             var i = 42;
         }
+        public void Nilad() { }
+        public void Duad(int a, int b) { }
         public void EmptyMethod() { }
     }
 
@@ -63,7 +65,6 @@ namespace NMeter
                 }).Then("their Fingerprints match", () => Assert.That(first.Fingerprint, Is.EqualTo(second.Fingerprint)));
         }
 
-
         [TestCaseSource("InstructionCountTests")]
         public void InstructionCount(Action verify) { verify(); }
         public IEnumerable<TestCaseData> InstructionCountTests() {
@@ -85,6 +86,23 @@ namespace NMeter
                         .Ret());
                 }).Then("they're ignored", () => Assert.That(first.InstructionCount, Is.EqualTo(1)));
         }
+
+        [TestCaseSource("ParameterCountTests")]
+        public void ParameterCount(MethodMetrics metrics, MethodInfo method) {
+            Assert.That(metrics.ParameterCount, Is.EqualTo(method.GetParameters().Length));
+        }
+        public IEnumerable<TestCaseData> ParameterCountTests() {            
+            return Tests(
+                MethodAndMetrics("Nilad").SetName("no parameters"),
+                MethodAndMetrics("Duad").SetName("multiple paramters"));
+        }
+
+        TestCaseData MethodAndMetrics(string name) {
+            var method = typeof(SampleClass).GetMethod(name);
+            return new TestCaseData(GetMetrics(method), method);
+        }
+
+        TestCaseData[] Tests(params TestCaseData[] tests) { return tests; }
 
         MethodMetrics GetMetrics(string name, System.Type returnType, Action<ILGenerator> createIL) {
             return GetMetrics(MethodFactory.CreateMethod(name, returnType, System.Type.EmptyTypes, createIL));

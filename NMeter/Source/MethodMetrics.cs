@@ -13,11 +13,12 @@ namespace NMeter
     {
         public byte[] Fingerprint;
         public int InstructionCount;
+        public int ParameterCount;
 
         public static MethodMetrics For<T>(Expression<Action<T>> action) { return For((action.Body as MethodCallExpression).Method); }
 
         public static MethodMetrics For(MethodInfo method) {
-            var metrics = new MethodMetrics();
+            var metrics = new MethodMetrics { ParameterCount = method.GetParameters().Length };
             var bytes = new MemoryStream();
             var writer = new StreamWriter(bytes);
             foreach(var item in Disassembler.Decode(method)) {
