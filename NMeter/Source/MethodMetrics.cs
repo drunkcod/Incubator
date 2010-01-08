@@ -21,8 +21,9 @@ namespace NMeter
             var bytes = new MemoryStream();
             var writer = new StreamWriter(bytes);
             foreach(var item in Disassembler.Decode(method)) {
-                if(!item.Opcode.Equals(Opcode.Nop))
-                    metrics.InstructionCount += 1;
+                if(item.Opcode.Equals(Opcode.Nop))
+                    continue;
+                metrics.InstructionCount += 1;
                 writer.WriteLine(item);
             }
             writer.Flush();

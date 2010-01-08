@@ -49,6 +49,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ILGeneratorExtensions.cs" />
     <Compile Include="MethodMetrics.cs" />
     <Compile Include="Program.cs" />
   </ItemGroup>
