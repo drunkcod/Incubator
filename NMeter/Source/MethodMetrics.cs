@@ -19,7 +19,7 @@ namespace NMeter
             var attributeData = CustomAttributeData.GetCustomAttributes(method);
             var metrics = new MethodMetrics { 
                 ParameterCount = method.GetParameters().Length,
-                IsGenerated = attributeData.Any(x => x.Constructor.DeclaringType.Name == "CompilerGeneratedAttribute")
+                IsGenerated = CheckIsGenerated(method)
             };
             var bytes = new MemoryStream();
             var writer = new StreamWriter(bytes);
@@ -35,6 +35,16 @@ namespace NMeter
                 metrics.Fingerprint = hash.ComputeHash(bytes);
                 return metrics;
             }
+        }
+
+        static bool CheckIsGenerated(MethodInfo method) {
+            return CheckIsGenerated(CustomAttributeData.GetCustomAttributes(method))
+                || (method.DeclaringType != null 
+                    && CheckIsGenerated(CustomAttributeData.GetCustomAttributes(method.DeclaringType)));
+        }
+
+        static bool CheckIsGenerated(IEnumerable<CustomAttributeData> attributeData) {
+            return attributeData.Any(x => x.Constructor.DeclaringType.Name == "CompilerGeneratedAttribute");
         }
     }
 }

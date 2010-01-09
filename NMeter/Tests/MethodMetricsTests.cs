@@ -6,6 +6,7 @@ using Xlnt.NUnit;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Reflection.Emit;
+using System.Runtime.CompilerServices;
 
 namespace NMeter
 {
@@ -20,8 +21,14 @@ namespace NMeter
         public void Duad(int a, int b) { }
         public void EmptyMethod() { }
 
-        [System.Runtime.CompilerServices.CompilerGenerated]
+        [CompilerGenerated]
         public void CompilerGenerated() { }
+    }
+
+    [CompilerGenerated]
+    public class GeneratedClass
+    {
+        public void SomeMethod(){}
     }
 
     class MethodFactory
@@ -107,6 +114,9 @@ namespace NMeter
                 .Then("IsGenerated is false", method => Assert.That(method.IsGenerated, Is.False))
                 
                 .When("CompilerGeneratedAttribute presten", () => GetMetrics(x => x.CompilerGenerated()))
+                .Then("IsGenerated is true", method => Assert.That(method.IsGenerated, Is.True))
+                
+                .When("Method belongs to a generated class", () => GetMetrics(typeof(GeneratedClass).GetMethod("SomeMethod")))
                 .Then("IsGenerated is true", method => Assert.That(method.IsGenerated, Is.True));
         }
 
