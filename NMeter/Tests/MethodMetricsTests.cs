@@ -50,7 +50,7 @@ namespace NMeter
         MethodMetrics first, second;
 
         public Scenario Fingerprinting() {
-            return new Scenario()
+            return new Scenario("Method fingerprinting")
                 .When("two identical methods", () => {
                     first = GetMetrics(x => x.DuplicateMethod1());
                     second = GetMetrics(x => x.DuplicateMethod2());
@@ -74,7 +74,7 @@ namespace NMeter
         }
 
         public Scenario InstructionCount() {
-            return new Scenario()
+            return new Scenario("Counting IL instructions")
                 .When("the method is empty", () => GetMetrics(x => x.EmptyMethod()))
                 .Then("InstructionCount is 1 (it need to ret(urn))", method => Assert.That(method.InstructionCount, Is.EqualTo(1)))
 
@@ -94,8 +94,8 @@ namespace NMeter
         }
 
         public Scenario IsGeneratedTests() {
-            return new Scenario()
-                .When("given a user defined function", () => GetMetrics(x => x.SomeMethod()))
+            return new Scenario("Detect generated method")
+                .When("given a user defined method", () => GetMetrics(x => x.SomeMethod()))
                 .Then("IsGenerated is false", method => Assert.That(method.IsGenerated, Is.False))
 
                 .When("CompilerGeneratedAttribute presten", () => GetMetrics(x => x.CompilerGenerated()))
