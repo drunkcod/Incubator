@@ -45,16 +45,11 @@ namespace NMeter
     }
 
     [TestFixture]
-    public class MethodMetricsTests
+    public class MethodMetricsTests : ScenarioFixture
     {
         MethodMetrics first, second;
 
-        [TestCaseSource("FingerprintingTests")]
-        [TestCaseSource("InstructionCountTests")]
-        [TestCaseSource("IsGeneratedTests")]
-        public void Scenarios(Action verify) { verify(); }
-        
-        public IEnumerable<TestCaseData> FingerprintingTests() {
+        public Scenario Fingerprinting() {
             return new Scenario()
                 .When("two identical methods", () => {
                     first = GetMetrics(x => x.DuplicateMethod1());
@@ -78,7 +73,7 @@ namespace NMeter
                 }).Then("their Fingerprints match", () => Assert.That(first.Fingerprint, Is.EqualTo(second.Fingerprint)));
         }
 
-        public IEnumerable<TestCaseData> InstructionCountTests() {
+        public Scenario InstructionCount() {
             return new Scenario()
                 .When("the method is empty", () => GetMetrics(x => x.EmptyMethod()))
                 .Then("InstructionCount is 1 (it need to ret(urn))", method => Assert.That(method.InstructionCount, Is.EqualTo(1)))
@@ -98,6 +93,18 @@ namespace NMeter
                 }).Then("they're ignored", () => Assert.That(first.InstructionCount, Is.EqualTo(1)));
         }
 
+        public Scenario IsGeneratedTests() {
+            return new Scenario()
+                .When("given a user defined function", () => GetMetrics(x => x.SomeMethod()))
+                .Then("IsGenerated is false", method => Assert.That(method.IsGenerated, Is.False))
+
+                .When("CompilerGeneratedAttribute presten", () => GetMetrics(x => x.CompilerGenerated()))
+                .Then("IsGenerated is true", method => Assert.That(method.IsGenerated, Is.True))
+
+                .When("Method belongs to a generated class", () => GetMetrics(typeof(GeneratedClass).GetMethod("SomeMethod")))
+                .Then("IsGenerated is true", method => Assert.That(method.IsGenerated, Is.True));
+        }
+
         [TestCaseSource("ParameterCountTests")]
         public void ParameterCount(MethodMetrics metrics, MethodInfo method) {
             Assert.That(metrics.ParameterCount, Is.EqualTo(method.GetParameters().Length));
@@ -106,18 +113,6 @@ namespace NMeter
             return Tests(
                 MethodAndMetrics("Nilad").SetName("no parameters"),
                 MethodAndMetrics("Duad").SetName("multiple paramters"));
-        }
-
-        public IEnumerable<TestCaseData> IsGeneratedTests() {
-            return new Scenario()
-                .When("given a user defined function", () => GetMetrics(x => x.SomeMethod()))
-                .Then("IsGenerated is false", method => Assert.That(method.IsGenerated, Is.False))
-                
-                .When("CompilerGeneratedAttribute presten", () => GetMetrics(x => x.CompilerGenerated()))
-                .Then("IsGenerated is true", method => Assert.That(method.IsGenerated, Is.True))
-                
-                .When("Method belongs to a generated class", () => GetMetrics(typeof(GeneratedClass).GetMethod("SomeMethod")))
-                .Then("IsGenerated is true", method => Assert.That(method.IsGenerated, Is.True));
         }
 
         TestCaseData MethodAndMetrics(string name) {
