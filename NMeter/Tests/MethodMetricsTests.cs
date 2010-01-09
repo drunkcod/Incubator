@@ -79,18 +79,18 @@ namespace NMeter
                 .Then("InstructionCount is 1 (it need to ret(urn))", method => Assert.That(method.InstructionCount, Is.EqualTo(1)))
 
                 .When("fed a sample method", () => {
-                    first = GetMetrics("Return42", typeof(int), il => il
+                    return GetMetrics("Return42", typeof(int), il => il
                         .Ldc(42)
                         .Ret());
-                }).Then("InstructionCount is number of IL instructions", () => Assert.That(first.InstructionCount, Is.EqualTo(2)))
+                }).Then("InstructionCount is number of IL instructions", method => Assert.That(method.InstructionCount, Is.EqualTo(2)))
 
                 .When("the method contains nops", () => {
-                    first = GetMetrics("Nop", typeof(void), il => il
+                    return GetMetrics("Nop", typeof(void), il => il
                         .Nop()
                         .Nop()
                         .Nop()
                         .Ret());
-                }).Then("they're ignored", () => Assert.That(first.InstructionCount, Is.EqualTo(1)));
+                }).Then("they're ignored", method => Assert.That(method.InstructionCount, Is.EqualTo(1)));
         }
 
         public Scenario IsGeneratedTests() {
@@ -103,6 +103,16 @@ namespace NMeter
 
                 .When("Method belongs to a generated class", () => GetMetrics(typeof(GeneratedClass).GetMethod("SomeMethod")))
                 .Then("IsGenerated is true", method => Assert.That(method.IsGenerated, Is.True));
+        }
+
+        public Scenario SignatureTests() {
+            return new Scenario("Generating method signature")
+                .It("should match DefaultFormatter", () => {
+                    var method = GetMethod(x => x.Duad(1, 2));
+                    var actual = GetMetrics(method).Signature;
+
+                    Assert.That(actual, Is.EqualTo(new DefaultFormatter().Format(method)));
+                });
         }
 
         [TestCaseSource("ParameterCountTests")]
@@ -126,8 +136,12 @@ namespace NMeter
             return GetMetrics(MethodFactory.CreateMethod(name, returnType, System.Type.EmptyTypes, createIL));
         }
 
+        MethodInfo GetMethod(Expression<Action<SampleClass>> expression){
+            return (expression.Body as MethodCallExpression).Method;
+        }
+
         MethodMetrics GetMetrics(Expression<Action<SampleClass>> expression) {
-            return MethodMetrics.For((expression.Body as MethodCallExpression).Method);
+            return MethodMetrics.For(GetMethod(expression));
         }
 
         MethodMetrics GetMetrics(MethodInfo method) { return MethodMetrics.For(method); }

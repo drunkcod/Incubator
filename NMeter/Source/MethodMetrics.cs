@@ -10,14 +10,16 @@ namespace NMeter
 {
     public class MethodMetrics
     {
-        public byte[] Fingerprint;
-        public int InstructionCount;
+        public string Signature;
         public int ParameterCount;
+        public int InstructionCount;
         public bool IsGenerated;
+        public byte[] Fingerprint;
 
         public static MethodMetrics For(MethodInfo method) {
             var attributeData = CustomAttributeData.GetCustomAttributes(method);
             var metrics = new MethodMetrics { 
+                Signature = new DefaultFormatter().Format(method),
                 ParameterCount = method.GetParameters().Length,
                 IsGenerated = CheckIsGenerated(method)
             };
