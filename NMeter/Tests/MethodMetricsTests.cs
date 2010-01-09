@@ -19,6 +19,9 @@ namespace NMeter
         public void Nilad() { }
         public void Duad(int a, int b) { }
         public void EmptyMethod() { }
+
+        [System.Runtime.CompilerServices.CompilerGenerated]
+        public void CompilerGenerated() { }
     }
 
     class MethodFactory
@@ -40,7 +43,10 @@ namespace NMeter
         MethodMetrics first, second;
 
         [TestCaseSource("FingerprintingTests")]
-        public void Fingerprinting(Action verify) { verify(); }
+        [TestCaseSource("InstructionCountTests")]
+        [TestCaseSource("IsGeneratedTests")]
+        public void Scenarios(Action verify) { verify(); }
+        
         public IEnumerable<TestCaseData> FingerprintingTests() {
             return new Scenario()
                 .When("two identical methods", () => {
@@ -49,8 +55,8 @@ namespace NMeter
                 }).Then("their Fingerprints match", () => Assert.That(first.Fingerprint, Is.EqualTo(second.Fingerprint)))
 
                 .When("diffrent methods", () => {
-                    first = MethodMetrics.For<SampleClass>(x => x.DuplicateMethod1());
-                    second = MethodMetrics.For<SampleClass>(x => x.SomeMethod());                
+                    first = GetMetrics(x => x.DuplicateMethod1());
+                    second = GetMetrics(x => x.SomeMethod());                
                 }).Then("they get different fingerprints", () => Assert.That(first.Fingerprint, Is.Not.EqualTo(second.Fingerprint)))
                 
                 .When("when difference is \"nop\"s", () => {
@@ -65,12 +71,10 @@ namespace NMeter
                 }).Then("their Fingerprints match", () => Assert.That(first.Fingerprint, Is.EqualTo(second.Fingerprint)));
         }
 
-        [TestCaseSource("InstructionCountTests")]
-        public void InstructionCount(Action verify) { verify(); }
         public IEnumerable<TestCaseData> InstructionCountTests() {
             return new Scenario()
-                .When("the method is empty", () => first = GetMetrics(x => x.EmptyMethod()))
-                .Then("InstructionCount is 1 (it need to ret(urn))", () => Assert.That(first.InstructionCount, Is.EqualTo(1)))
+                .When("the method is empty", () => GetMetrics(x => x.EmptyMethod()))
+                .Then("InstructionCount is 1 (it need to ret(urn))", method => Assert.That(method.InstructionCount, Is.EqualTo(1)))
 
                 .When("fed a sample method", () => {
                     first = GetMetrics("Return42", typeof(int), il => il
@@ -97,6 +101,15 @@ namespace NMeter
                 MethodAndMetrics("Duad").SetName("multiple paramters"));
         }
 
+        public IEnumerable<TestCaseData> IsGeneratedTests() {
+            return new Scenario()
+                .When("given a user defined function", () => GetMetrics(x => x.SomeMethod()))
+                .Then("IsGenerated is false", method => Assert.That(method.IsGenerated, Is.False))
+                
+                .When("CompilerGeneratedAttribute presten", () => GetMetrics(x => x.CompilerGenerated()))
+                .Then("IsGenerated is true", method => Assert.That(method.IsGenerated, Is.True));
+        }
+
         TestCaseData MethodAndMetrics(string name) {
             var method = typeof(SampleClass).GetMethod(name);
             return new TestCaseData(GetMetrics(method), method);
@@ -109,7 +122,7 @@ namespace NMeter
         }
 
         MethodMetrics GetMetrics(Expression<Action<SampleClass>> expression) {
-            return MethodMetrics.For(expression);
+            return MethodMetrics.For((expression.Body as MethodCallExpression).Method);
         }
 
         MethodMetrics GetMetrics(MethodInfo method) { return MethodMetrics.For(method); }

@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Linq.Expressions;
 using System.Security.Cryptography;
 using System.Reflection;
 using Pencil.Core;
+using System.Runtime.CompilerServices;
 
 namespace NMeter
 {
@@ -14,11 +13,14 @@ namespace NMeter
         public byte[] Fingerprint;
         public int InstructionCount;
         public int ParameterCount;
-
-        public static MethodMetrics For<T>(Expression<Action<T>> action) { return For((action.Body as MethodCallExpression).Method); }
+        public bool IsGenerated;
 
         public static MethodMetrics For(MethodInfo method) {
-            var metrics = new MethodMetrics { ParameterCount = method.GetParameters().Length };
+            var attributeData = CustomAttributeData.GetCustomAttributes(method);
+            var metrics = new MethodMetrics { 
+                ParameterCount = method.GetParameters().Length,
+                IsGenerated = attributeData.Any(x => x.Constructor.DeclaringType.Name == "CompilerGeneratedAttribute")
+            };
             var bytes = new MemoryStream();
             var writer = new StreamWriter(bytes);
             foreach(var item in Disassembler.Decode(method)) {
