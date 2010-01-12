@@ -7,24 +7,10 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
+using NMeter.Sample;
 
 namespace NMeter
 {
-    public class SampleClass
-    {
-        public void DuplicateMethod1() { }
-        public void DuplicateMethod2() { }
-        public void SomeMethod() {
-            var i = 42;
-        }
-        public void Nilad() { }
-        public void Duad(int a, int b) { }
-        public void EmptyMethod() { }
-
-        [CompilerGenerated]
-        public void CompilerGenerated() { }
-    }
-
     [CompilerGenerated]
     public class GeneratedClass
     {
@@ -52,12 +38,12 @@ namespace NMeter
         public Scenario Fingerprinting() {
             return new Scenario("Method fingerprinting")
                 .When("two identical methods", () => {
-                    first = GetMetrics(x => x.DuplicateMethod1());
-                    second = GetMetrics(x => x.DuplicateMethod2());
+                    first = GetMetrics(x => x.Fib(42));
+                    second = GetMetrics(x => x.Fib2(42));
                 }).Then("their Fingerprints match", () => Assert.That(first.Fingerprint, Is.EqualTo(second.Fingerprint)))
 
                 .When("diffrent methods", () => {
-                    first = GetMetrics(x => x.DuplicateMethod1());
+                    first = GetMetrics(x => x.Fib(42));
                     second = GetMetrics(x => x.SomeMethod());                
                 }).Then("they get different fingerprints", () => Assert.That(first.Fingerprint, Is.Not.EqualTo(second.Fingerprint)))
                 

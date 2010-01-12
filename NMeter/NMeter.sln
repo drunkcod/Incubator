@@ -5,6 +5,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NMeter", "Source\NMeter.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NMeter.Tests", "Tests\NMeter.Tests.csproj", "{7295CF73-7E34-4BA9-9275-EC9B1A022606}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NMeter.Sample", "Sample\NMeter.Sample.csproj", "{EF46073A-5B1E-4952-872F-2B01D3374CB0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,6 +21,10 @@ Global
 		{7295CF73-7E34-4BA9-9275-EC9B1A022606}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7295CF73-7E34-4BA9-9275-EC9B1A022606}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7295CF73-7E34-4BA9-9275-EC9B1A022606}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EF46073A-5B1E-4952-872F-2B01D3374CB0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EF46073A-5B1E-4952-872F-2B01D3374CB0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EF46073A-5B1E-4952-872F-2B01D3374CB0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EF46073A-5B1E-4952-872F-2B01D3374CB0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -7,11 +7,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{7295CF73-7E34-4BA9-9275-EC9B1A022606}</ProjectGuid>
+    <ProjectGuid>{EF46073A-5B1E-4952-872F-2B01D3374CB0}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NMeter</RootNamespace>
-    <AssemblyName>NMeter.Tests</AssemblyName>
+    <RootNamespace>NMeter.Sample</RootNamespace>
+    <AssemblyName>NMeter.Sample</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -31,14 +31,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="nunit.framework, Version=2.5.3.9345, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Lib\NUnit\nunit.framework.dll</HintPath>
-    </Reference>
-    <Reference Include="Pencil, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Pencil\Build\Debug\Pencil.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -53,23 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\Xlnt.Stuff\Source\NUnit\Scenario.cs">
-      <Link>Scenario.cs</Link>
-    </Compile>
-    <Compile Include="MethodMetricsTests.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Sample\NMeter.Sample.csproj">
-      <Project>{EF46073A-5B1E-4952-872F-2B01D3374CB0}</Project>
-      <Name>NMeter.Sample</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Source\NMeter.csproj">
-      <Project>{411A048E-0B4C-4508-8B66-4E7A996A6108}</Project>
-      <Name>NMeter</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Properties\" />
+    <Compile Include="SampleClass.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
