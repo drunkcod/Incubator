@@ -47,8 +47,13 @@
     </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Xlnt.Stuff, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Xlnt.Stuff\Build\Xlnt.Stuff.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Checkpoint.cs" />
     <Compile Include="ILGeneratorExtensions.cs" />
     <Compile Include="MethodMetrics.cs" />
     <Compile Include="Program.cs" />

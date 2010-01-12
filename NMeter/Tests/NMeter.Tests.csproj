@@ -51,12 +51,17 @@
     </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Xlnt.Stuff, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Xlnt.Stuff\Build\Xlnt.Stuff.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\Xlnt.Stuff\Source\NUnit\Scenario.cs">
       <Link>Scenario.cs</Link>
     </Compile>
     <Compile Include="MethodMetricsTests.cs" />
+    <Compile Include="SampleCheckpoint.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Sample\NMeter.Sample.csproj">
