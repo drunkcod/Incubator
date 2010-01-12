@@ -60,6 +60,7 @@
     <Compile Include="..\..\Xlnt.Stuff\Source\NUnit\Scenario.cs">
       <Link>Scenario.cs</Link>
     </Compile>
+    <Compile Include="CheckpointTests.cs" />
     <Compile Include="MethodMetricsTests.cs" />
     <Compile Include="SampleCheckpoint.cs" />
   </ItemGroup>

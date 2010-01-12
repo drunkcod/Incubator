@@ -31,6 +31,8 @@ namespace NMeter.Sample
         public void Duad(int a, int b) { }
         public void EmptyMethod() { }
 
+        public static void StaticMethod() { }
+
         [CompilerGenerated]
         public void CompilerGenerated() { }
     }

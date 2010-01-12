@@ -15,13 +15,15 @@ namespace NMeter
         public int InstructionCount;
         public bool IsGenerated;
         public byte[] Fingerprint;
+        public bool IsStatic;
 
         public static MethodMetrics For(MethodInfo method) {
             var attributeData = CustomAttributeData.GetCustomAttributes(method);
             var metrics = new MethodMetrics { 
                 Signature = new DefaultFormatter().Format(method),
                 ParameterCount = method.GetParameters().Length,
-                IsGenerated = CheckIsGenerated(method)
+                IsGenerated = CheckIsGenerated(method),
+                IsStatic = method.IsStatic
             };
             var bytes = new MemoryStream();
             var writer = new StreamWriter(bytes);

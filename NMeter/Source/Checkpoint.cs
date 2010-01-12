@@ -3,27 +3,33 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Reflection;
 using Xlnt.Stuff;
+using System.Collections.ObjectModel;
 
 namespace NMeter
 {
+    public class ClassMetrics
+    {
+        public string Name { get; set; }
+    }
+
     public class Checkpoint
     {
-        int classCount;
-        int methodCount;
+        List<ClassMetrics> classes = new List<ClassMetrics>();
+        List<MethodMetrics> methods = new List<MethodMetrics>();
 
         public static Checkpoint For(Assembly assembly) {
             var result = new Checkpoint();
             var types = assembly.GetTypes();
-            result.classCount = types.Length;
-            result.methodCount = types.SelectMany(x => DefinedMethods(x)).Count();
+            types.ForEach(x => result.classes.Add(new ClassMetrics { Name = x.FullName }));
+            types.SelectMany(x => DefinedMethods(x)).ForEach(x => result.methods.Add(MethodMetrics.For(x)));
             return result; 
         }
-        
-        public int ClassCount { get { return classCount; } }
-        public int MethodCount { get { return methodCount; } }
+
+        public List<ClassMetrics> Classes { get { return classes; } }
+        public List<MethodMetrics> Methods { get { return methods; } }
 
         static IEnumerable<MethodInfo> DefinedMethods(Type type){
-            return type.GetMethods()
+            return type.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static)
                 .Where(method => method.DeclaringType.Equals(type));
         }
 
