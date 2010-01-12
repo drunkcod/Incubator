@@ -8,6 +8,7 @@ using System.Reflection;
 using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
 using NMeter.Sample;
+using Xlnt.Stuff;
 
 namespace NMeter
 {
