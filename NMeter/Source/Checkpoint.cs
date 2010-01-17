@@ -30,10 +30,15 @@ namespace NMeter
         public void AddMetric<T>(string name) {
             metrics.Add(new KeyValuePair<string,object>(name, new List<T>()));
         }
-        public IEnumerable GetMetric(string name) { return new object[0]; }
+        public IEnumerable GetMetric(string name) {
+            foreach(var item in metrics)
+                if(item.Key == name)
+                    return item.Value as IEnumerable;
+            throw new ArgumentException();
+        }
 
         public Guid Id = Guid.NewGuid();
-        public int MetricsCount { get { return 0; } }
+        public int MetricsCount { get { return metrics.Count; } }
         public List<ClassMetrics> Classes { get { return classes; } }
         public List<MethodMetrics> Methods { get { return methods; } }
 

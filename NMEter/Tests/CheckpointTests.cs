@@ -24,7 +24,7 @@ namespace NMeter
                 })
             .Given("a newly created Checkpoint", () => new Checkpoint())
                 .When("a new metric is added", checkpoint => { checkpoint.AddMetric<ClassMetrics>("Classes"); })
-                .Then("it can be retreived", checkpoint => Assert.That(checkpoint.GetMetric("Classes"), Is.TypeOf<IList<ClassMetrics>>()))
+                .Then("it can be retreived", checkpoint => Assert.That(checkpoint.GetMetric("Classes"), Is.AssignableTo<IList<ClassMetrics>>()))
                 .And("MetricCount is increased", checkpoint => Assert.That(checkpoint.MetricsCount, Is.EqualTo(1)));
         }
 
