@@ -17,8 +17,15 @@ namespace NMeter
                 .It("should receive a unique id when created", () => {
                     var first = new Checkpoint();
                     var second = new Checkpoint();
-                    Assert.That(first.Id, Is.Not.EqualTo(second.Id));
-                });
+                    Assert.That(first.Id, Is.Not.EqualTo(second.Id)); })
+                .It("has 0 metrics when created", () => {
+                    var checkpoint = new Checkpoint();
+                    Assert.That(checkpoint.MetricsCount, Is.EqualTo(0));
+                })
+            .Given("a newly created Checkpoint", () => new Checkpoint())
+                .When("a new metric is added", checkpoint => { checkpoint.AddMetric<ClassMetrics>("Classes"); })
+                .Then("it can be retreived", checkpoint => Assert.That(checkpoint.GetMetric("Classes"), Is.TypeOf<IList<ClassMetrics>>()))
+                .And("MetricCount is increased", checkpoint => Assert.That(checkpoint.MetricsCount, Is.EqualTo(1)));
         }
 
         [Test]

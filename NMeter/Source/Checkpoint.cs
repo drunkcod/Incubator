@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using Xlnt.Stuff;
 using System.Collections.ObjectModel;
+using System.Collections;
 
 namespace NMeter
 {
@@ -13,6 +14,7 @@ namespace NMeter
 
     public class Checkpoint
     {
+        List<KeyValuePair<string, object>> metrics = new List<KeyValuePair<string, object>>();
         List<ClassMetrics> classes = new List<ClassMetrics>();
         List<MethodMetrics> methods = new List<MethodMetrics>();
 
@@ -25,7 +27,13 @@ namespace NMeter
             return result; 
         }
 
+        public void AddMetric<T>(string name) {
+            metrics.Add(new KeyValuePair<string,object>(name, new List<T>()));
+        }
+        public IEnumerable GetMetric(string name) { return new object[0]; }
+
         public Guid Id = Guid.NewGuid();
+        public int MetricsCount { get { return 0; } }
         public List<ClassMetrics> Classes { get { return classes; } }
         public List<MethodMetrics> Methods { get { return methods; } }
 

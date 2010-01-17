@@ -5,6 +5,7 @@ using System.Reflection;
 using System.IO;
 using System.Security.Cryptography;
 using Pencil.Core;
+using Xlnt.Stuff;
 
 namespace NMeter
 {

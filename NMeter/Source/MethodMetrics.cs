@@ -6,7 +6,7 @@
         public int ParameterCount;
         public int InstructionCount;
         public bool IsGenerated;
-        public byte[] Fingerprint;
         public bool IsStatic;
+        public byte[] Fingerprint;
     }
 }
