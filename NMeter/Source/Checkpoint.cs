@@ -7,8 +7,7 @@ using System.Collections.ObjectModel;
 
 namespace NMeter
 {
-    public class ClassMetrics
-    {
+    public class ClassMetrics {
         public string Name { get; set; }
     }
 
@@ -26,6 +25,7 @@ namespace NMeter
             return result; 
         }
 
+        public Guid Id = Guid.NewGuid();
         public List<ClassMetrics> Classes { get { return classes; } }
         public List<MethodMetrics> Methods { get { return methods; } }
 
@@ -33,6 +33,5 @@ namespace NMeter
             return type.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static)
                 .Where(method => method.DeclaringType.Equals(type));
         }
-
     }
 }

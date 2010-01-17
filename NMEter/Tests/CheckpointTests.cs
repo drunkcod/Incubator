@@ -4,12 +4,23 @@ using System.Linq;
 using System.Text;
 using NUnit.Framework;
 using NMeter.Sample;
+using Xlnt.NUnit;
 
 namespace NMeter
 {
     [TestFixture]
-    public class CheckpointTests
+    public class CheckpointTests : ScenarioFixture
     {
+        public Scenario Specs() {
+            return new Scenario()
+            .Describe<Checkpoint>()
+                .It("should receive a unique id when created", () => {
+                    var first = new Checkpoint();
+                    var second = new Checkpoint();
+                    Assert.That(first.Id, Is.Not.EqualTo(second.Id));
+                });
+        }
+
         [Test]
         public void should_analyze_interna_classes() {
             var checkpoint = Checkpoint.For(typeof(SampleClass).Assembly);
