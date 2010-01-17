@@ -18,10 +18,11 @@ namespace NMeter
         List<MethodMetrics> methods = new List<MethodMetrics>();
 
         public static Checkpoint For(Assembly assembly) {
+            var methodMetrics = new MethodMetricsExtractor();
             var result = new Checkpoint();
             var types = assembly.GetTypes();
             types.ForEach(x => result.classes.Add(new ClassMetrics { Name = x.FullName }));
-            types.SelectMany(x => DefinedMethods(x)).ForEach(x => result.methods.Add(MethodMetrics.For(x)));
+            types.SelectMany(x => DefinedMethods(x)).ForEach(x => result.methods.Add(methodMetrics.ComputeMetrics(x)));
             return result; 
         }
 

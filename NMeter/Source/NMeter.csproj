@@ -55,6 +55,7 @@
   <ItemGroup>
     <Compile Include="Checkpoint.cs" />
     <Compile Include="MethodMetrics.cs" />
+    <Compile Include="MethodMetricsExtractor.cs" />
     <Compile Include="Program.cs" />
   </ItemGroup>
   <ItemGroup>

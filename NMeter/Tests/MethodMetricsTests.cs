@@ -128,10 +128,11 @@ namespace NMeter
         }
 
         MethodMetrics GetMetrics(Expression<Action<SampleClass>> expression) {
-            return MethodMetrics.For(GetMethod(expression));
+            return GetMetrics(GetMethod(expression));
         }
 
-        MethodMetrics GetMetrics(MethodInfo method) { return MethodMetrics.For(method); }
+        MethodMetrics GetMetrics(MethodInfo method) { return methodMetrics.ComputeMetrics(method); }
 
+        MethodMetricsExtractor methodMetrics = new MethodMetricsExtractor();
     }
 }
