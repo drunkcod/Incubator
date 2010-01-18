@@ -14,33 +14,55 @@ namespace NMeter
 
     public class Checkpoint
     {
-        List<KeyValuePair<string, object>> metrics = new List<KeyValuePair<string, object>>();
-        List<ClassMetrics> classes = new List<ClassMetrics>();
-        List<MethodMetrics> methods = new List<MethodMetrics>();
+        struct CheckpointMetric
+        {
+            public CheckpointMetric(string name, IList items) {
+                this.Name = name;
+                this.Items = items;
+            }
+
+            public readonly string Name;
+            public readonly IList Items;
+        }
+
+        List<CheckpointMetric> metrics = new List<CheckpointMetric>();
 
         public static Checkpoint For(Assembly assembly) {
             var methodMetrics = new MethodMetricsExtractor();
             var result = new Checkpoint();
             var types = assembly.GetTypes();
-            types.ForEach(x => result.classes.Add(new ClassMetrics { Name = x.FullName }));
-            types.SelectMany(x => DefinedMethods(x)).ForEach(x => result.methods.Add(methodMetrics.ComputeMetrics(x)));
+            Action<ClassMetrics> addClass = result.AddMetric<ClassMetrics>("Classes").Add;
+            types.ForEach(x => addClass(new ClassMetrics { Name = x.FullName }));
+
+            Action<MethodMetrics> addMethod = result.AddMetric<MethodMetrics>("Methods").Add;
+            types.SelectMany(x => DefinedMethods(x)).ForEach(x => addMethod(methodMetrics.ComputeMetrics(x)));
             return result; 
         }
 
-        public void AddMetric<T>(string name) {
-            metrics.Add(new KeyValuePair<string,object>(name, new List<T>()));
+        public IList<T> AddMetric<T>(string name) {
+            var list = new List<T>();
+            metrics.Add(new CheckpointMetric(name, list));
+            return list;
         }
-        public IEnumerable GetMetric(string name) {
+
+        public void EachMetric(Action<string, IEnumerable> withMetric) {
             foreach(var item in metrics)
-                if(item.Key == name)
-                    return item.Value as IEnumerable;
+                withMetric(item.Name, item.Items);
+        }
+
+        public IList GetMetric(string name) {
+            foreach(var item in metrics)
+                if(item.Name == name)
+                    return item.Items;
             throw new ArgumentException();
+        }
+
+        public IList<T> GetMetric<T>(string name) {
+            return (IList<T>)GetMetric(name);
         }
 
         public Guid Id = Guid.NewGuid();
         public int MetricsCount { get { return metrics.Count; } }
-        public List<ClassMetrics> Classes { get { return classes; } }
-        public List<MethodMetrics> Methods { get { return methods; } }
 
         static IEnumerable<MethodInfo> DefinedMethods(Type type){
             return type.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static)
