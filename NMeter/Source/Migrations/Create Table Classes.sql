@@ -1,3 +1,3 @@
 ﻿create table Classes(
-	[Checkpoint] uniqueidentifier,
+	[Checkpoint] int,
 	Name varchar(max))

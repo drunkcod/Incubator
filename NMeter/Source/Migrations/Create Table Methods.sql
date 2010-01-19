@@ -1,5 +1,5 @@
 ﻿create table Methods(
-	[Checkpoint] uniqueidentifier,
+	[Checkpoint] int,
 	Signature varchar(max),
 	ParameterCount int,
 	InstructionCount int,
