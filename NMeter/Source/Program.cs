@@ -7,6 +7,7 @@ using Xlnt.Data;
 using Xlnt.Stuff;
 using System.Reflection;
 using System.Diagnostics;
+using NMeter.Migraine;
 
 namespace NMeter
 {
@@ -39,12 +40,15 @@ namespace NMeter
 
     class Program
     {
+        const string ConnectionString = "Server=.;Initial Catalog=MethodFingerprints;Integrated Security=SSPI";
+
         static void Main(string[] args) {
+            Migrations.ApplyMissing(ConnectionString);
             var time = Stopwatch.StartNew();
             var checkpoint = Checkpoint.For(typeof(Program).Assembly);
             Console.WriteLine("Checkpoint generation took {0}", time.Elapsed);
 
-            var writer = new BulkCopyCheckpointWriter("Server=.;Initial Catalog=MethodFingerprints;Integrated Security=SSPI");
+            var writer = new BulkCopyCheckpointWriter(ConnectionString);
             writer.Write(checkpoint);
             Console.WriteLine("Saved after {0}", time.Elapsed);
 
