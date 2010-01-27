@@ -26,6 +26,7 @@ namespace NMeter
         }
 
         List<CheckpointMetric> metrics = new List<CheckpointMetric>();
+        private Action<ICheckpointWriter> writeMetrics = x => { };
 
         public static Checkpoint For(Assembly assembly) {
             var methodMetrics = new MethodMetricsExtractor();
@@ -42,6 +43,7 @@ namespace NMeter
         public IList<T> AddMetric<T>(string name) {
             var list = new List<T>();
             metrics.Add(new CheckpointMetric(name, list));
+            writeMetrics += x => x.WriteMetric(name, list);
             return list;
         }
 
@@ -59,6 +61,13 @@ namespace NMeter
 
         public IList<T> GetMetric<T>(string name) {
             return (IList<T>)GetMetric(name);
+        }
+
+        public void SaveTo(ICheckpointWriter writer)
+        {
+            writer.Write(this);
+            writeMetrics(writer);
+
         }
 
         public Guid Id = Guid.NewGuid();

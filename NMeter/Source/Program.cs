@@ -11,10 +11,14 @@ using NMeter.Migraine;
 
 namespace NMeter
 {
-    class BulkCopyCheckpointWriter
+    public interface ICheckpointWriter
     {
-        static readonly MethodInfo WriteMetric = typeof(BulkCopyCheckpointWriter).GetMethod("WriteMetricCore", BindingFlags.Instance | BindingFlags.NonPublic);
+        void Write(Checkpoint checkpoint);
+        void WriteMetric<T>(string name, IList<T> items);
+    }
 
+    class BulkCopyCheckpointWriter : ICheckpointWriter
+    {
         readonly string connectionString;
         SqlBulkCopy bulkCopy;
         int checkpointId;
@@ -25,17 +29,9 @@ namespace NMeter
         }
 
         public void Write(Checkpoint checkpoint) {
-            WriteCheckpointCore(checkpoint);
-            checkpoint.EachMetric((name, items) => BindWriteMetric(name, items));
-        }
-
-        void BindWriteMetric(params object[] arguments) {
-            WriteMetric.MakeGenericMethod(arguments[1].GetType().GetGenericArguments()).Invoke(this, arguments);
-        }
-
-        void WriteCheckpointCore(Checkpoint checkpoint) {
-            using(var db = new SqlConnection(connectionString))
-            using(var command = db.CreateCommand()) {
+            using (var db = new SqlConnection(connectionString))
+            using (var command = db.CreateCommand())
+            {
                 command.CommandText = "insert Checkpoints(Id, Project, Name, Created) output Inserted.LocalId values(@Id, @Project, @Name, @Created)";
                 command.Parameters.AddWithValue("@Id", checkpoint.Id);
                 command.Parameters.AddWithValue("@Project", "NMeter");
@@ -46,7 +42,7 @@ namespace NMeter
             }
         }
 
-        void WriteMetricCore<T>(string name, IList<T> items) {
+        public void WriteMetric<T>(string name, IList<T> items) {
             bulkCopy.DestinationTableName = name;
             var data = items.AsDataReader();
             data.MapAll();
@@ -59,7 +55,7 @@ namespace NMeter
 
     class Program
     {
-        const string ConnectionString = "Server=.;Initial Catalog=MethodFingerprints;Integrated Security=SSPI";
+        const string ConnectionString = "Server=.;Initial Catalog=NMeter;Integrated Security=SSPI";
 
         static void Main(string[] args) {
             Migrations.ApplyMissing(ConnectionString);
@@ -68,7 +64,7 @@ namespace NMeter
             Console.WriteLine("Checkpoint generation took {0}", time.Elapsed);
 
             var writer = new BulkCopyCheckpointWriter(ConnectionString);
-            writer.Write(checkpoint);
+            checkpoint.SaveTo(writer);
             Console.WriteLine("Saved after {0}", time.Elapsed);
 
         }
