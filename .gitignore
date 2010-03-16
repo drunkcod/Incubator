@@ -1,4 +1,5 @@
 Build
 *.suo
+*.user
 obj/
 TrackerTools/Server/bin
