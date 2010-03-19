@@ -21,7 +21,7 @@ type System.DirectoryServices.DirectoryEntry with
             | None -> loop node.Parent
         loop x.Parent
         
-type WebSiteState = 
+type WebSiteStatus = 
     | Starting = 1
     | Started = 2
     | Stopping = 3
@@ -35,7 +35,7 @@ type IWebSite =
     abstract Children : DirectoryEntries
     abstract Properties : PropertyCollection
     abstract VirtualDirectories : seq<IVirtualDirectory>
-    abstract ServerState : WebSiteState
+    abstract Status : WebSiteStatus
     abstract Start : unit -> unit
     abstract Stop : unit -> unit
 
@@ -61,7 +61,7 @@ type IisAdmin(path) =
                 DirectoryEntry.flatten entry
                 |> Seq.choose AsVirtualDirectory
             member x.Properties = entry.Properties
-            member x.ServerState = entry.InvokeGet("ServerState") :?> WebSiteState
+            member x.Status = entry.InvokeGet("Status") :?> WebSiteStatus
             member x.Start() = entry.Invoke("Start") |> ignore
             member x.Stop() = entry.Invoke("Stop") |> ignore })        
 
@@ -75,5 +75,5 @@ type IisAdmin(path) =
 try
     let iis = IisAdmin("IIS://www1.qb.local/w3svc")
     iis.FindVirtualDirectory "cpx"
-    |> fun x -> Console.WriteLine("{0} is {1}", x.WebSite.Name, x.WebSite.ServerState)
+    |> fun x -> Console.WriteLine("{0} is {1}", x.WebSite.Name, x.WebSite.Status)
 with | :? KeyNotFoundException as e -> Console.WriteLine("No such virtual directory")    
