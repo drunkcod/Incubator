@@ -3,7 +3,7 @@ open System
 open System.Collections.Generic
 open System.DirectoryServices
 
-type SerivceStatus = 
+type ServiceStatus = 
     | Unavailable = 0
     | Starting = 1
     | Started = 2
@@ -12,16 +12,19 @@ type SerivceStatus =
     | Pausing = 5
     | Paused = 6
     | Continuing = 7
+    
+type IServiceController = 
+    abstract Name : string
+    abstract Status : ServiceStatus
+    abstract Start : unit -> unit
+    abstract Stop : unit -> unit
 
 type IWebSite =
+    inherit IServiceController
     abstract Id : string
-    abstract Name : string
     abstract Children : DirectoryEntries
     abstract Properties : PropertyCollection
     abstract VirtualDirectories : seq<IVirtualDirectory>
-    abstract Status : SerivceStatus
-    abstract Start : unit -> unit
-    abstract Stop : unit -> unit
 
 and IVirtualDirectory =
     abstract Name : string
@@ -47,7 +50,7 @@ and IisAdmin(path) =
                 DirectoryEntry.flatten entry
                 |> Seq.choose IisAdmin.AsVirtualDirectory
             member x.Properties = entry.Properties
-            member x.Status = entry.InvokeGet("Status") :?> SerivceStatus
+            member x.Status = entry.InvokeGet("Status") :?> ServiceStatus
             member x.Start() = entry.Invoke("Start") |> ignore
             member x.Stop() = entry.Invoke("Stop") |> ignore } :> obj)
         | _ -> None
@@ -62,6 +65,8 @@ and IisAdmin(path) =
     static member AsVirtualDirectory entry = IisAdmin.Cast<IVirtualDirectory> entry     
     
     static member Open path =
+        if not (DirectoryEntry.Exists path) then
+            raise (ArgumentException "Path doesn't exist")
         match IisAdmin.Materialize(new DirectoryEntry(path)) with
         | Some(x) -> x
         | None -> raise (ArgumentException "Invalid path")
