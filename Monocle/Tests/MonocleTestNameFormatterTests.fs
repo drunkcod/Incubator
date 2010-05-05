@@ -15,12 +15,12 @@ let formatter = TestNameFormatter() :> ITestDecorator
 
 [<Test>]
 let should_convert_underscore_to_space() =
-    TestNameFormatter.format "should_convert_underscore_to_space"
+    TestNameFormatter.Format "should_convert_underscore_to_space"
     |> should be "should convert underscore to space"
 
 [<Test>]
 let it_removes_traling_Tests_from_name() =
-    TestNameFormatter.format "TestNameFormatterTests"
+    TestNameFormatter.Format "TestNameFormatterTests"
     |> should be "TestNameFormatter"
 
 [<Test>]
