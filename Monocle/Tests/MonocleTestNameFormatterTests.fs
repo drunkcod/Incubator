@@ -20,17 +20,14 @@ let should_convert_underscore_to_space() =
     |> should be "should convert underscore to space"
 
 [<Test>]
+let should_convert_plus_to_space() =
+    formatter.Format "should+convert+plus+to+space"
+    |> should be "should convert plus to space"
+
+[<Test>]
 let it_removes_traling_Tests_from_name() =
     formatter.Format "TestNameFormatterTests"
     |> should be "TestNameFormatter"
-
-[<Test>]
-let should_set_FullName_equal_to_Name_for_non_suite() =
-    let test = Mock<Test>(TestName(Name = "Name", FullName = "FullName"))
-
-    let result = decorate test.Object
-
-    result.TestName.FullName |> should be result.TestName.Name
 
 [<Test>]
 let wont_tamper_with_full_name_for_suite() =

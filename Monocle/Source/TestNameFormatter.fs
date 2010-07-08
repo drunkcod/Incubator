@@ -1,15 +1,16 @@
 ﻿namespace Monocle
 open System
+open System.Text.RegularExpressions
 open NUnit.Core.Extensibility
 
 type TestNameFormatter() =
     static member private RemoveSuffix suffix (s:string) =
         if s.EndsWith(suffix) then
-            s.Substring(0, suffix.Length)
+            s.Substring(0, s.Length - suffix.Length)
         else s
 
     member this.Format (s:string) =
-        s.Replace('_', ' ')
+        Regex.Replace(s, "_|\+"," ")
         |> TestNameFormatter.RemoveSuffix "Tests"
 
     interface ITestDecorator with

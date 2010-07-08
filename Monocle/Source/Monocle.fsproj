@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>Monocle</RootNamespace>
     <AssemblyName>Monocle</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <Name>Monocle</Name>
     <TargetFrameworkProfile />
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
@@ -41,7 +41,6 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="TestNameFormatter.fs" />
