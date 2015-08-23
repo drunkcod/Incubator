@@ -8,7 +8,7 @@ void Main() {
 	var times = Measure(250, () => {
 		var timer = Stopwatch.StartNew();
 		Task.WaitAll(
-			GitLog(@"D:\Work\panelapi", new[]{ "an", "B" }, x => { 
+			GitLog(@"D:\Home\Cone", new[]{ "an", "B" }, x => { 
 				//new { Author = x[0].AsString(), Message = x[1].AsString() }.Dump();
 				//if(x.Message.Split('\n').Length > 1) x.Dump();
 				//c.Add(x);
